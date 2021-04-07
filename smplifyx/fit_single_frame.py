@@ -509,7 +509,7 @@ def fit_single_frame(img,
     if visualize:
         import pyrender
            
-        for idx in range(len(out_mesh.vertices)/2):
+        for idx in range(0, 1000):
             out_mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
     
         material = pyrender.MetallicRoughnessMaterial(
