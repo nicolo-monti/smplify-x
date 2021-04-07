@@ -88,7 +88,7 @@ def fit_single_frame(img,
                      vposer_latent_dim=32,
                      vposer_ckpt='',
                      use_joints_conf=False,
-                     interactive=True,
+                     interactive=False,
                      visualize=False,
                      save_meshes=True,
                      degrees=None,
@@ -303,7 +303,7 @@ def fit_single_frame(img,
     loss = loss.to(device=device)
 
     with fitting.FittingMonitor(
-            batch_size=batch_size, visualize=visualize, **kwargs) as monitor:
+            batch_size=batch_size, visualize=False, **kwargs) as monitor:
 
         img = torch.tensor(img, dtype=dtype)
 
