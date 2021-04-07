@@ -517,8 +517,7 @@ def fit_single_frame(img,
             out_mesh,
             material=material)
 
-        scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-                               ambient_light=np.array([1.0, 1,0, 1.0, 1.0]))
+        scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0]))
         #dl = pyrender.DirectionalLight(color=[1.0, 1.0, 1.0], intensity=10.0)
         #direc_l_node = scene.add(dl, pose=cam_pose)
         scene.add(mesh, 'mesh')
