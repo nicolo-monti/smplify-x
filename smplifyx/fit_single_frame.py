@@ -508,7 +508,10 @@ def fit_single_frame(img,
 
     if visualize:
         import pyrender
-
+        
+        for idx in range(len(out_mesh.vertices)):
+            out_mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
+            
         material = pyrender.MetallicRoughnessMaterial(
             metallicFactor=0.0,
             alphaMode='OPAQUE',
@@ -516,9 +519,7 @@ def fit_single_frame(img,
         mesh = pyrender.Mesh.from_trimesh(
             out_mesh,
             material=material)
-        for idx in range(len(mesh.vertices)):
-            mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
-    
+        
         scene = pyrender.Scene(bg_color=np.zeros(4), ambient_light=np.ones(3))
         #dl = pyrender.DirectionalLight(color=[1.0, 1.0, 1.0], intensity=10.0)
         #direc_l_node = scene.add(dl, pose=cam_pose)
