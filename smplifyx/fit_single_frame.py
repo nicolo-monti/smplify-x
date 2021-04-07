@@ -516,7 +516,7 @@ def fit_single_frame(img,
         mesh = pyrender.Mesh.from_trimesh(
             out_mesh,
             material=material)
-        for idx in range(len(trimesh_mesh.vertices)):
+        for idx in range(len(mesh.vertices)):
             mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
     
         scene = pyrender.Scene(bg_color=np.zeros(4), ambient_light=np.ones(3))
