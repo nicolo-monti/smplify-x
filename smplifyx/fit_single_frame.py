@@ -304,7 +304,7 @@ def fit_single_frame(img,
     loss = loss.to(device=device)
 
     with fitting.FittingMonitor(
-            batch_size=batch_size, visualize=visualize, **kwargs) as monitor:
+            batch_size=batch_size, visualize=False, **kwargs) as monitor:
 
         img = torch.tensor(img, dtype=dtype)
 
@@ -540,9 +540,9 @@ def fit_single_frame(img,
         scene.add(camera, pose=camera_pose)
 
         # Get the lights from the viewer
-        light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
-        for node in light_nodes:
-            scene.add_node(node)
+#         light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
+#         for node in light_nodes:
+#             scene.add_node(node)
         
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
