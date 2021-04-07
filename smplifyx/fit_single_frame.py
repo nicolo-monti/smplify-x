@@ -516,8 +516,10 @@ def fit_single_frame(img,
         mesh = pyrender.Mesh.from_trimesh(
             out_mesh,
             material=material)
-
-        scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0])
+        for idx in range(len(trimesh_mesh.vertices)):
+            mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
+    
+        scene = pyrender.Scene(bg_color=np.zeros(4), ambient_light=np.ones(3))
         #dl = pyrender.DirectionalLight(color=[1.0, 1.0, 1.0], intensity=10.0)
         #direc_l_node = scene.add(dl, pose=cam_pose)
         scene.add(mesh, 'mesh')
@@ -547,7 +549,7 @@ def fit_single_frame(img,
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
                                        point_size=1.0)
-        color, _ = r.render(scene, flags=pyrender.RenderFlags.RGBA)
+        color, _ = r.render(scene, flags=pyrender.constants.RenderFlags.FLAT)
         color = color.astype(np.float32) / 255.0
 
         valid_mask = (color[:, :, -1] > 0)[:, :, np.newaxis]
