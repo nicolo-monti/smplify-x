@@ -88,7 +88,7 @@ def fit_single_frame(img,
                      vposer_latent_dim=32,
                      vposer_ckpt='',
                      use_joints_conf=False,
-                     interactive=False,
+                     interactive=True,
                      visualize=False,
                      save_meshes=True,
                      degrees=None,
@@ -508,10 +508,7 @@ def fit_single_frame(img,
 
     if visualize:
         import pyrender
-        
-        #for idx in range(len(out_mesh.vertices)):
-        #    out_mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
-            
+
         material = pyrender.MetallicRoughnessMaterial(
             metallicFactor=0.0,
             alphaMode='OPAQUE',
@@ -519,11 +516,9 @@ def fit_single_frame(img,
         mesh = pyrender.Mesh.from_trimesh(
             out_mesh,
             material=material)
-        
+
         scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
                                ambient_light=(0.3, 0.3, 0.3))
-        #dl = pyrender.DirectionalLight(color=[1.0, 1.0, 1.0], intensity=10.0)
-        #direc_l_node = scene.add(dl, pose=cam_pose)
         scene.add(mesh, 'mesh')
 
         camera_center = camera.center.detach().cpu().numpy().squeeze()
@@ -541,24 +536,19 @@ def fit_single_frame(img,
         scene.add(camera, pose=camera_pose)
 
         # Get the lights from the viewer
-        #light_nodes = monitor.mv.viewer._create_raymond_lights()
-        #for node in light_nodes:
-        #    scene.add_node(node)
-        #from pyrender import DirectionalLight
-        #direc_l = DirectionalLight(color=np.ones(3), intensity=1.0)
-        #scene.add_node(direc_l, pose=camera_pose)
-        
+        light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
+        for node in light_nodes:
+            scene.add_node(node)
+
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
                                        point_size=1.0)
-        color, _ = r.render(scene, flags=pyrender.constants.RenderFlags.FLAT)
+        color, _ = r.render(scene, flags=pyrender.RenderFlags.RGBA)
         color = color.astype(np.float32) / 255.0
 
         valid_mask = (color[:, :, -1] > 0)[:, :, np.newaxis]
         input_img = img.detach().cpu().numpy()
-        output_img = color[:, :, :-1]
-        #output_img = (color[:, :, :-1] * valid_mask +
-        #              (1 - valid_mask) * input_img)
+        output_img = color[:, :, 0:3]
 
         img = pil_img.fromarray((output_img * 255).astype(np.uint8))
         img.save(out_img_fn)
