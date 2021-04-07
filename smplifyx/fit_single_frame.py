@@ -541,7 +541,7 @@ def fit_single_frame(img,
         #    scene.add_node(node)
         from pyrender import DirectionalLight
         direc_l = DirectionalLight(color=np.ones(3), intensity=1.0)
-        scene.add_node(direc_l)
+        scene.add_node(direc_l, pose=camera_pose)
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
                                        point_size=1.0)
