@@ -536,9 +536,9 @@ def fit_single_frame(img,
         scene.add(camera, pose=camera_pose)
 
         # Get the lights from the viewer
-        light_nodes = monitor.mv.viewer._create_raymond_lights()
-        for node in light_nodes:
-            scene.add_node(node)
+        #light_nodes = monitor.mv.viewer._create_raymond_lights()
+        #for node in light_nodes:
+        #    scene.add_node(node)
 
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
