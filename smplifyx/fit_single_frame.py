@@ -29,6 +29,7 @@ except ImportError:
 import sys
 import os
 import os.path as osp
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 import numpy as np
 import torch
@@ -303,7 +304,7 @@ def fit_single_frame(img,
     loss = loss.to(device=device)
 
     with fitting.FittingMonitor(
-            batch_size=batch_size, visualize=False, **kwargs) as monitor:
+            batch_size=batch_size, visualize=visualize, **kwargs) as monitor:
 
         img = torch.tensor(img, dtype=dtype)
 
@@ -509,8 +510,8 @@ def fit_single_frame(img,
     if visualize:
         import pyrender
            
-        for idx in range(0, 5000):
-            out_mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
+        #for idx in range(0, 5000):
+        #    out_mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
     
         material = pyrender.MetallicRoughnessMaterial(
             metallicFactor=0.0,
@@ -539,9 +540,9 @@ def fit_single_frame(img,
         scene.add(camera, pose=camera_pose)
 
         # Get the lights from the viewer
-        #light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
-        #for node in light_nodes:
-        #    scene.add_node(node)
+        light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
+        for node in light_nodes:
+            scene.add_node(node)
         
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
