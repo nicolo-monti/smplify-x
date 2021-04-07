@@ -518,7 +518,7 @@ def fit_single_frame(img,
             material=material)
 
         scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-                               ambient_light=np.array([0.02, 0.02, 0.02, 1.0])
+                               ambient_light=np.array([0.02, 0.02, 0.02, 1.0]))
         scene.add(mesh, 'mesh')
 
         camera_center = camera.center.detach().cpu().numpy().squeeze()
