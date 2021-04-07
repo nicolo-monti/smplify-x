@@ -536,14 +536,14 @@ def fit_single_frame(img,
         scene.add(camera, pose=camera_pose)
 
         # Get the lights from the viewer
-        light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
-        for node in light_nodes:
-            scene.add_node(node)
-
+        #light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
+        #for node in light_nodes:
+        #    scene.add_node(node)
+        
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
                                        point_size=1.0)
-        color, _ = r.render(scene, flags=pyrender.RenderFlags.RGBA)
+        color, _ = r.render(scene, flags=pyrender.RenderFlags.FLAT)
         color = color.astype(np.float32) / 255.0
 
         valid_mask = (color[:, :, -1] > 0)[:, :, np.newaxis]
