@@ -509,7 +509,7 @@ def fit_single_frame(img,
     if visualize:
         import pyrender
            
-        for idx in range(0, 1000):
+        for idx in range(0, 5000):
             out_mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
     
         material = pyrender.MetallicRoughnessMaterial(
@@ -546,7 +546,7 @@ def fit_single_frame(img,
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
                                        point_size=1.0)
-        color, _ = r.render(scene, flags=pyrender.RenderFlags.FLAT)
+        color, _ = r.render(scene, flags=pyrender.RenderFlags.RGBA)
         color = color.astype(np.float32) / 255.0
 
         valid_mask = (color[:, :, -1] > 0)[:, :, np.newaxis]
