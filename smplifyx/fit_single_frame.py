@@ -550,7 +550,7 @@ def fit_single_frame(img,
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
                                        point_size=1.0)
-        color, _ = r.render(scene, flags=pyrender.constants.RenderFlags.FLAT)
+        color, _ = r.render(scene, flags=pyrender.constants.RenderFlags.RGBA)
         color = color.astype(np.float32) / 255.0
 
         valid_mask = (color[:, :, -1] > 0)[:, :, np.newaxis]
