@@ -518,7 +518,7 @@ def fit_single_frame(img,
             material=material)
 
         scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-                               ambient_light=(0.3, 0.3, 0.3))
+                               ambient_light=np.array([0.02, 0.02, 0.02, 1.0])
         scene.add(mesh, 'mesh')
 
         camera_center = camera.center.detach().cpu().numpy().squeeze()
@@ -539,7 +539,9 @@ def fit_single_frame(img,
         #light_nodes = monitor.mv.viewer._create_raymond_lights()
         #for node in light_nodes:
         #    scene.add_node(node)
-
+        from pyrender import DirectionalLight
+        direc_l = DirectionalLight(color=np.ones(3), intensity=1.0)
+        scene.add_node(direc_l)
         r = pyrender.OffscreenRenderer(viewport_width=W,
                                        viewport_height=H,
                                        point_size=1.0)
@@ -548,8 +550,9 @@ def fit_single_frame(img,
 
         valid_mask = (color[:, :, -1] > 0)[:, :, np.newaxis]
         input_img = img.detach().cpu().numpy()
-        output_img = (color[:, :, :-1] * valid_mask +
-                      (1 - valid_mask) * input_img)
+        output_img = color[:, :, :-1]
+        #output_img = (color[:, :, :-1] * valid_mask +
+        #              (1 - valid_mask) * input_img)
 
         img = pil_img.fromarray((output_img * 255).astype(np.uint8))
         img.save(out_img_fn)
