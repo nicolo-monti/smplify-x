@@ -562,7 +562,12 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         cx=camera_center[0], cy=camera_center[1])
     scene.add(camera, pose=camera_pose)
 
-    light = pyrender.light.DirectionalLight()
+    #light = pyrender.light.DirectionalLight()
+
+    light = pyrender.SpotLight(color=np.ones(3), intensity=3.0,
+                               innerConeAngle=np.pi / 16.0)
+    scene.add(light, pose=camera_pose)
+
     scene.add(light)
     r = pyrender.OffscreenRenderer(viewport_width=img_width,
                                    viewport_height=img_height,
