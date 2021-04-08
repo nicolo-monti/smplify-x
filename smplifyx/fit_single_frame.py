@@ -545,7 +545,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
     mesh_new.vertex_colors = vertex_colors
     print("mesh visual kind: %s" % mesh_new.visual.kind)
 
-    mesh_new = pyrender.Mesh.from_points(out_mesh.vertices, colors=colors)
+    mesh_new = pyrender.Mesh.from_points(out_mesh.vertices, colors=vertex_colors)
 
     #mesh = pyrender.Mesh.from_trimesh(
     #    mesh_new,
