@@ -44,7 +44,7 @@ from optimizers import optim_factory
 
 import fitting
 from human_body_prior.tools.model_loader import load_vposer
-
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 def fit_single_frame(img,
                      keypoints,
