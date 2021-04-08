@@ -529,6 +529,7 @@ def fit_single_frame(img,
 def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width, img_height):
 
     import pyrender
+    import trimesh
 
     material = pyrender.MetallicRoughnessMaterial(
         metallicFactor=0.0,
