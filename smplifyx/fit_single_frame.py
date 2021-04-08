@@ -508,6 +508,9 @@ def fit_single_frame(img,
 
     if visualize:
 
+        fid  = 0
+        root_save_dir = '/content/for_smplpix'
+
         camera_center = camera.center.detach().cpu().numpy().squeeze()
         np.savetxt('camera_center.txt', camera_center)
         camera_transl = camera.translation.detach().cpu().numpy().squeeze()
@@ -537,7 +540,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         baseColorFactor=(1.0, 1.0, 0.9, 1.0))
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
+    vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt')) / 255
     mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces)
     mesh_new.visual.vertex_colors = vertex_colors
 
