@@ -543,13 +543,14 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
     vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
     mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
     mesh_new.vertex_colors = vertex_colors
+    print("mesh visaul kind: %s" % mesh_new.visual.kind)
 
     mesh = pyrender.Mesh.from_trimesh(
         mesh_new,
         material=material)
 
     scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-                           ambient_light=(0.5, 0.5, 0.5))
+                           ambient_light=(0.3, 0.3, 0.3))
     #scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0])
     scene.add(mesh, 'mesh')
 
