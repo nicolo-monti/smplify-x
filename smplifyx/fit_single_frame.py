@@ -511,7 +511,7 @@ def fit_single_frame(img,
         script_dir = os.path.dirname(os.path.realpath(__file__))
         vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
         mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
-        #out_mesh.vertex_colors = vertex_colors
+        mesh_new.vertex_colors = vertex_colors
 
         root_save_dir = '/content/for_smplpix'
         save_dir_input = os.path.join(root_save_dir, 'input')
