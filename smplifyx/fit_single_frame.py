@@ -547,7 +547,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
 
     mesh = pyrender.Mesh.from_trimesh(
         mesh_new,
-        smooth=False, wireframe=True)
+        smooth=False, wireframe=False)
 
     scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
                            ambient_light=(0.3, 0.3, 0.3))
