@@ -542,8 +542,8 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
     script_dir = os.path.dirname(os.path.realpath(__file__))
     vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
     mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
-    mesh_new.vertex_colors = vertex_colors
-    print("mesh visaul kind: %s" % mesh_new.visual.kind)
+    mesh_new.vertex_colors = np.random.uniform(size=(len(out_mesh.vertices), 4))
+    print("mesh visual kind: %s" % mesh_new.visual.kind)
 
     mesh = pyrender.Mesh.from_trimesh(
         mesh_new,
@@ -562,11 +562,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         cx=camera_center[0], cy=camera_center[1])
     scene.add(camera, pose=camera_pose)
 
-    #light = pyrender.light.DirectionalLight()
-
-    light = pyrender.SpotLight(color=np.ones(3), intensity=3.0,
-                               innerConeAngle=np.pi / 16.0)
-    scene.add(light, pose=camera_pose)
+    light = pyrender.light.DirectionalLight()
 
     scene.add(light)
     r = pyrender.OffscreenRenderer(viewport_width=img_width,
