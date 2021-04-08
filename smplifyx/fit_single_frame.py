@@ -548,8 +548,9 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         mesh_new,
         material=material)
 
-    scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-                           ambient_light=(0.3, 0.3, 0.3))
+    #scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
+    #                       ambient_light=(0.3, 0.3, 0.3))
+    scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0])
     scene.add(mesh, 'mesh')
 
     camera_pose = np.eye(4)
