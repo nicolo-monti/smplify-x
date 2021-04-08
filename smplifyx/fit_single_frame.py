@@ -540,7 +540,7 @@ def fit_single_frame(img,
         input_img = pil_img.fromarray((input_img * 255).astype(np.uint8))
         input_img.save(os.path.join(save_dir_output, '%05d.png' % fid))
 
-        output_img = render_mesh(mesh_new, camera_center, camera_transl, focal_length, W, H)
+        output_img = render_mesh(out_mesh, camera_center, camera_transl, focal_length, W, H)
         output_img = pil_img.fromarray(output_img)
         output_img.save(os.path.join(save_dir_input, '%05d.png' % fid))
 
@@ -556,14 +556,15 @@ def render_mesh(mesh_trimesh, camera_center, camera_transl, focal_length, img_wi
         alphaMode='OPAQUE',
         baseColorFactor=(1.0, 1.0, 0.9, 1.0))
 
-
-    #mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
-    #mesh_new.vertex_colors = vertex_colors
-    #print("mesh visual kind: %s" % mesh_new.visual.kind)
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
+    mesh_new = trimesh.Trimesh(vertices=mesh_trimesh.vertices, faces=mesh_trimesh.faces, vertex_colors=vertex_colors)
+    mesh_new.vertex_colors = vertex_colors
+    print("mesh visual kind: %s" % mesh_new.visual.kind)
 
     #mesh = pyrender.Mesh.from_points(out_mesh.vertices, colors=vertex_colors)
 
-    mesh = pyrender.Mesh.from_trimesh(mesh_trimesh, smooth=False, wireframe=False)
+    mesh = pyrender.Mesh.from_trimesh(mesh_new, smooth=False, wireframe=False)
 
     scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
                            ambient_light=(0.3, 0.3, 0.3))
