@@ -29,7 +29,6 @@ except ImportError:
 import sys
 import os
 import os.path as osp
-os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 import numpy as np
 import torch
@@ -508,52 +507,59 @@ def fit_single_frame(img,
         out_mesh.export(mesh_fn)
 
     if visualize:
-        import pyrender
-           
-        #for idx in range(0, 5000):
-        #    out_mesh.visual.vertex_colors[idx, :3] = [10, 20, 30]
-    
-        material = pyrender.MetallicRoughnessMaterial(
-            metallicFactor=0.0,
-            alphaMode='OPAQUE',
-            baseColorFactor=(1.0, 1.0, 0.9, 1.0))
-        mesh = pyrender.Mesh.from_trimesh(
-            out_mesh,
-            material=material)
-
-        scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-                               ambient_light=(0.3, 0.3, 0.3))
-        scene.add(mesh, 'mesh')
 
         camera_center = camera.center.detach().cpu().numpy().squeeze()
+        np.savetxt('camera_center.txt', camera_center)
         camera_transl = camera.translation.detach().cpu().numpy().squeeze()
         # Equivalent to 180 degrees around the y-axis. Transforms the fit to
         # OpenGL compatible coordinate system.
         camera_transl[0] *= -1.0
+        np.savetxt('camera_transl.txt', camera_transl)
 
-        camera_pose = np.eye(4)
-        camera_pose[:3, 3] = camera_transl
-
-        camera = pyrender.camera.IntrinsicsCamera(
-            fx=focal_length, fy=focal_length,
-            cx=camera_center[0], cy=camera_center[1])
-        scene.add(camera, pose=camera_pose)
-
-        # Get the lights from the viewer
-#         light_nodes = pyrender.Viewer(scene)._create_raymond_lights()
-#         for node in light_nodes:
-#             scene.add_node(node)
-        light = pyrender.light.DirectionalLight()
-        scene.add(light)
-        r = pyrender.OffscreenRenderer(viewport_width=W,
-                                       viewport_height=H,
-                                       point_size=1.0)
-        color, _ = r.render(scene, flags=pyrender.RenderFlags.RGBA)
-        color = color.astype(np.float32) / 255.0
-
-        valid_mask = (color[:, :, -1] > 0)[:, :, np.newaxis]
         input_img = img.detach().cpu().numpy()
-        output_img = color[:, :, 0:3]
+        input_img = pil_img.fromarray((input_img * 255).astype(np.uint8))
+        input_img.save('input.png')
 
-        img = pil_img.fromarray((output_img * 255).astype(np.uint8))
-        img.save(out_img_fn)
+        output_img = render_mesh(out_mesh, camera_center, camera_transl, focal_length, W, H)
+        output_img = pil_img.fromarray(output_img)
+        output_img.save('output.png')
+
+
+
+def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width, img_height):
+
+    import pyrender
+
+    material = pyrender.MetallicRoughnessMaterial(
+        metallicFactor=0.0,
+        alphaMode='OPAQUE',
+        baseColorFactor=(1.0, 1.0, 0.9, 1.0))
+
+    mesh = pyrender.Mesh.from_trimesh(
+        out_mesh,
+        material=material)
+
+    scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
+                           ambient_light=(0.3, 0.3, 0.3))
+    scene.add(mesh, 'mesh')
+
+    camera_pose = np.eye(4)
+    camera_pose[:3, 3] = camera_transl
+
+    camera = pyrender.camera.IntrinsicsCamera(
+        fx=focal_length, fy=focal_length,
+        cx=camera_center[0], cy=camera_center[1])
+    scene.add(camera, pose=camera_pose)
+
+    light = pyrender.light.DirectionalLight()
+    scene.add(light)
+    r = pyrender.OffscreenRenderer(viewport_width=img_width,
+                                   viewport_height=img_height,
+                                   point_size=1.0)
+    color, _ = r.render(scene, flags=pyrender.RenderFlags.RGBA)
+    color = color.astype(np.float32) / 255.0
+
+    output_img = color[:, :, 0:3]
+    output_img = (output_img * 255).astype(np.uint8)
+
+    return output_img
