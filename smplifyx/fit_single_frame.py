@@ -510,7 +510,8 @@ def fit_single_frame(img,
 
         script_dir = os.path.dirname(os.path.realpath(__file__))
         vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
-        out_mesh.vertex_colors = vertex_colors
+        mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
+        #out_mesh.vertex_colors = vertex_colors
 
         root_save_dir = '/content/for_smplpix'
         save_dir_input = os.path.join(root_save_dir, 'input')
@@ -533,13 +534,13 @@ def fit_single_frame(img,
                 pickle.dump(camera_dict, f, pickle.HIGHEST_PROTOCOL)
             with open(os.path.join(root_save_dir, 'smpl_params.pkl'), 'wb') as f:
                 pickle.dump(results[min_idx]['result'], f, pickle.HIGHEST_PROTOCOL)
-            out_mesh.export(os.path.join(root_save_dir, 'smplx_mesh.obj'))
+            mesh_new.export(os.path.join(root_save_dir, 'smplx_mesh.obj'))
 
         input_img = img.detach().cpu().numpy()
         input_img = pil_img.fromarray((input_img * 255).astype(np.uint8))
         input_img.save(os.path.join(save_dir_output, '%05d.png' % fid))
 
-        output_img = render_mesh(out_mesh, camera_center, camera_transl, focal_length, W, H)
+        output_img = render_mesh(mesh_new, camera_center, camera_transl, focal_length, W, H)
         output_img = pil_img.fromarray(output_img)
         output_img.save(os.path.join(save_dir_input, '%05d.png' % fid))
 
