@@ -508,6 +508,7 @@ def fit_single_frame(img,
 
     if visualize:
 
+        script_dir = os.path.dirname(os.path.realpath(__file__))
         vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
         out_mesh.vertex_colors = vertex_colors
 
@@ -554,7 +555,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         alphaMode='OPAQUE',
         baseColorFactor=(1.0, 1.0, 0.9, 1.0))
 
-    script_dir = os.path.dirname(os.path.realpath(__file__))
+
     #mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
     #mesh_new.vertex_colors = vertex_colors
     #print("mesh visual kind: %s" % mesh_new.visual.kind)
