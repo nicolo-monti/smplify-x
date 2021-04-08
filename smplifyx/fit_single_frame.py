@@ -548,9 +548,9 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         mesh_new,
         material=material)
 
-    #scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-    #                       ambient_light=(0.3, 0.3, 0.3))
-    scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0])
+    scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
+                           ambient_light=(1.0, 1.0, 1.0))
+    #scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0])
     scene.add(mesh, 'mesh')
 
     camera_pose = np.eye(4)
@@ -566,7 +566,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
     r = pyrender.OffscreenRenderer(viewport_width=img_width,
                                    viewport_height=img_height,
                                    point_size=1.0)
-    color, _ = r.render(scene, flags=pyrender.RenderFlags.RGBA)
+    color, _ = r.render(scene, flags=pyrender.RenderFlags.FLAT)
     color = color.astype(np.float32) / 255.0
 
     output_img = color[:, :, 0:3]
