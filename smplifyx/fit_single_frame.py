@@ -549,7 +549,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         material=material)
 
     scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
-                           ambient_light=(1.0, 1.0, 1.0))
+                           ambient_light=(0.5, 0.5, 0.5))
     #scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0])
     scene.add(mesh, 'mesh')
 
