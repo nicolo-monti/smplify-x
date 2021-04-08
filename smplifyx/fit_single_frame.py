@@ -536,11 +536,12 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
         baseColorFactor=(1.0, 1.0, 0.9, 1.0))
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    out_mesh.visual.vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
-    out_mesh.visual.kind = 'vertex'
+    vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
+    mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces)
+    mesh_new.visual.vertex_colors = vertex_colors
 
     mesh = pyrender.Mesh.from_trimesh(
-        out_mesh,
+        mesh_new,
         material=material)
 
     scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 0.0],
