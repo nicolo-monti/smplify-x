@@ -528,7 +528,6 @@ def fit_single_frame(img,
         if fid == 0:
             camera_dict = {'camera_center': camera_center, 'camera_transl': camera_transl, 'focal_length': focal_length,
                            'image_width': W, 'image_height': H}
-            import pickle
             with open(os.path.join(root_save_dir, 'camera.pkl'), 'wb') as f:
                 pickle.dump(camera_dict, f, pickle.HIGHEST_PROTOCOL)
             with open(os.path.join(root_save_dir, 'smpl_params.pkl'), 'wb') as f:
