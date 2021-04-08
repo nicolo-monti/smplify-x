@@ -537,6 +537,7 @@ def render_mesh(out_mesh, camera_center, camera_transl, focal_length, img_width,
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
     out_mesh.visual.vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
+    out_mesh.visual.kind = 'vertex'
 
     mesh = pyrender.Mesh.from_trimesh(
         out_mesh,
