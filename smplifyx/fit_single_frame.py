@@ -513,12 +513,13 @@ def fit_single_frame(img,
         vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
         mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
         mesh_new.vertex_colors = vertex_colors
-
-        save_dir_results = os.path.join(output_folder, 'rendered_smplifyx_meshes')
+        
         save_dir_input = os.path.join(output_folder, 'input_images')
-
+        save_dir_results = os.path.join(output_folder, 'rendered_smplifyx_meshes')
+        
+        os.makedirs(save_dir_input, exist_ok=True)
         os.makedirs(save_dir_results, exist_ok=True)
-        os.makedirs(save_dir_output, exist_ok=True)
+        
         fid = len(os.listdir(save_dir_input))
 
         camera_center = camera.center.detach().cpu().numpy().squeeze()
