@@ -515,7 +515,7 @@ def fit_single_frame(img,
         mesh_new.vertex_colors = vertex_colors
 
         save_dir_input = os.path.join(output_folder, 'input_images')
-        save_dir_output = os.path.join(output_folder, 'output_output_images')
+        save_dir_output = os.path.join(output_folder, 'rendered_smplifyx_meshes')
 
         os.makedirs(save_dir_input, exist_ok=True)
         os.makedirs(save_dir_output, exist_ok=True)
@@ -530,11 +530,11 @@ def fit_single_frame(img,
         if fid == 0:
             camera_dict = {'camera_center': camera_center, 'camera_transl': camera_transl, 'focal_length': focal_length,
                            'image_width': W, 'image_height': H}
-            with open(os.path.join(root_save_dir, 'camera.pkl'), 'wb') as f:
+            with open(os.path.join(output_folder, 'camera.pkl'), 'wb') as f:
                 pickle.dump(camera_dict, f, pickle.HIGHEST_PROTOCOL)
-            with open(os.path.join(root_save_dir, 'smpl_params.pkl'), 'wb') as f:
+            with open(os.path.join(output_folder, 'smpl_params.pkl'), 'wb') as f:
                 pickle.dump(results[min_idx]['result'], f, pickle.HIGHEST_PROTOCOL)
-            mesh_new.export(os.path.join(root_save_dir, 'smplx_mesh.obj'))
+            mesh_new.export(os.path.join(output_folder, 'smplx_mesh.obj'))
 
         input_img = img.detach().cpu().numpy()
         input_img = pil_img.fromarray((input_img * 255).astype(np.uint8))
