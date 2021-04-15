@@ -58,6 +58,7 @@ def fit_single_frame(img,
                      shape_prior,
                      expr_prior,
                      angle_prior,
+                     root_save_dir,
                      result_fn='out.pkl',
                      mesh_fn='out.obj',
                      out_img_fn='overlay.png',
@@ -507,13 +508,12 @@ def fit_single_frame(img,
         out_mesh.export(mesh_fn)
 
     if visualize:
-
+        
         script_dir = os.path.dirname(os.path.realpath(__file__))
         vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
         mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
         mesh_new.vertex_colors = vertex_colors
 
-        root_save_dir = '/content/for_smplpix'
         save_dir_input = os.path.join(root_save_dir, 'input')
         save_dir_output = os.path.join(root_save_dir, 'output')
 
