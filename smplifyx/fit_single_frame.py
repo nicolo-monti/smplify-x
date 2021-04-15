@@ -514,8 +514,8 @@ def fit_single_frame(img,
         mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
         mesh_new.vertex_colors = vertex_colors
 
-        save_dir_input = os.path.join(root_save_dir, 'input')
-        save_dir_output = os.path.join(root_save_dir, 'output')
+        save_dir_input = os.path.join(output_folder, 'input_images')
+        save_dir_output = os.path.join(output_folder, 'output_output_images')
 
         os.makedirs(save_dir_input, exist_ok=True)
         os.makedirs(save_dir_output, exist_ok=True)
