@@ -514,10 +514,10 @@ def fit_single_frame(img,
         mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
         mesh_new.vertex_colors = vertex_colors
 
+        save_dir_results = os.path.join(output_folder, 'rendered_smplifyx_meshes')
         save_dir_input = os.path.join(output_folder, 'input_images')
-        save_dir_output = os.path.join(output_folder, 'rendered_smplifyx_meshes')
 
-        os.makedirs(save_dir_input, exist_ok=True)
+        os.makedirs(save_dir_results, exist_ok=True)
         os.makedirs(save_dir_output, exist_ok=True)
         fid = len(os.listdir(save_dir_input))
 
@@ -538,12 +538,15 @@ def fit_single_frame(img,
 
         input_img = img.detach().cpu().numpy()
         input_img = pil_img.fromarray((input_img * 255).astype(np.uint8))
-        input_img.save(os.path.join(save_dir_output, '%05d.png' % fid))
-
+        in_img_save_path = os.path.join(save_dir_input, '%05d.png' % fid)
+        input_img.save(in_img_save_path)
+        print("saved input image to %s" % in_img_save_path)
+        
         output_img = render_mesh(out_mesh, camera_center, camera_transl, focal_length, W, H)
         output_img = pil_img.fromarray(output_img)
-        output_img.save(os.path.join(save_dir_input, '%05d.png' % fid))
-
+        out_img_save_path = os.path.join(save_dir_results, '%05d.png' % fid)
+        output_img.save(out_img_save_path)
+        print("saved rendered mesh to %s" % out_img_save_path)
 
 
 def render_mesh(mesh_trimesh, camera_center, camera_transl, focal_length, img_width, img_height):
