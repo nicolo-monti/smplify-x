@@ -181,9 +181,13 @@ def fit_single_frame(img,
     use_vposer = kwargs.get('use_vposer', True)
     vposer, pose_embedding = [None, ] * 2
     if use_vposer:
-        pose_embedding = torch.zeros([batch_size, 32],
-                                     dtype=dtype, device=device,
-                                     requires_grad=True)
+        latent = kwargs['latent']
+        if latent is not None:
+            pose_embedding = latent
+        else:
+            pose_embedding = torch.zeros([batch_size, 32],
+                                         dtype=dtype, device=device,
+                                         requires_grad=True)
 
         vposer_ckpt = osp.expandvars(vposer_ckpt)
         vposer, _ = load_vposer(vposer_ckpt, vp_model='snapshot')
@@ -549,6 +553,7 @@ def fit_single_frame(img,
         output_img.save(out_img_save_path)
         print("saved rendered mesh to %s" % out_img_save_path)
 
+    return pose_embedding
 
 def render_mesh(mesh_trimesh, camera_center, camera_transl, focal_length, img_width, img_height):
 
