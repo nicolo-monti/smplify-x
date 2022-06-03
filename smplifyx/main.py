@@ -198,8 +198,9 @@ def main(**args):
     # Add a fake batch dimension for broadcasting
     joint_weights.unsqueeze_(dim=0)
 
+    latent = None
+
     for idx, data in enumerate(dataset_obj):
-        
         try: 
             img = data['img']
             fn = data['fn']
@@ -243,7 +244,7 @@ def main(**args):
 
                 out_img_fn = osp.join(curr_img_folder, 'output.png')
 
-                fit_single_frame(img, keypoints[[person_id]],
+                latent = fit_single_frame(img, keypoints[[person_id]],
                                  body_model=body_model,
                                  camera=camera,
                                  joint_weights=joint_weights,
@@ -260,6 +261,7 @@ def main(**args):
                                  right_hand_prior=right_hand_prior,
                                  jaw_prior=jaw_prior,
                                  angle_prior=angle_prior,
+                                 latent=latent,
                                  **args)
         except:
             continue
