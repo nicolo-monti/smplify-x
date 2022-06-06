@@ -262,6 +262,7 @@ def main(**args):
                                  jaw_prior=jaw_prior,
                                  angle_prior=angle_prior,
                                  latent=latent,
+                                 zero_grads=args.get('zero_grads', False),
                                  **args)
         except:
             continue

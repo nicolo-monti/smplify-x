@@ -184,6 +184,8 @@ def fit_single_frame(img,
         latent = kwargs['latent']
         if latent is not None:
             pose_embedding = latent
+            if kwargs['zero_grads'] == True:
+                pose_embedding.grad = torch.zeros_like(pose_embedding)
         else:
             pose_embedding = torch.zeros([batch_size, 32],
                                          dtype=dtype, device=device,
@@ -512,7 +514,6 @@ def fit_single_frame(img,
         out_mesh.export(mesh_fn)
 
     if visualize:
-        
         script_dir = os.path.dirname(os.path.realpath(__file__))
         vertex_colors = np.loadtxt(os.path.join(script_dir, 'smplx_verts_colors.txt'))
         mesh_new = trimesh.Trimesh(vertices=out_mesh.vertices, faces=out_mesh.faces, vertex_colors=vertex_colors)
@@ -556,7 +557,6 @@ def fit_single_frame(img,
     return pose_embedding
 
 def render_mesh(mesh_trimesh, camera_center, camera_transl, focal_length, img_width, img_height):
-
     import pyrender
     import trimesh
 
